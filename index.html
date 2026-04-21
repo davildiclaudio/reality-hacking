@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
@@ -314,18 +314,18 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
 <!-- google fonts removed for offline/sandbox portability; using system fallbacks -->
 <style>
   :root {
-    --bg-0: #0b0a0c;
-    --bg-1: #141217;
-    --bg-2: #1c1920;
-    --bg-3: #27232c;
-    --ink: #ece6dd;
-    --ink-dim: #a69e93;
-    --ink-mute: #6c6459;
-    --crimson: #a9243a;
-    --crimson-bright: #d63a52;
-    --gold: #c9a96a;
-    --gold-dim: #8c7848;
-    --line: #2a2530;
+    --bg-0: #fafaf8;
+    --bg-1: #f2f0ec;
+    --bg-2: #ffffff;
+    --bg-3: #e8e5df;
+    --ink: #1a1a1c;
+    --ink-dim: #4a4845;
+    --ink-mute: #8a8681;
+    --crimson: #962036;
+    --crimson-bright: #b42845;
+    --gold: #9a7721;
+    --gold-dim: #7a5d18;
+    --line: #d9d5cd;
   }
   html, body { background: var(--bg-0); color: var(--ink); }
   body {
@@ -343,12 +343,13 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
   .vline { width: 1px; background: var(--line); }
   .noise {
     background-image:
-      radial-gradient(ellipse at 20% 10%, rgba(169,36,58,0.12), transparent 55%),
-      radial-gradient(ellipse at 85% 85%, rgba(201,169,106,0.07), transparent 55%);
+      radial-gradient(ellipse at 20% 10%, rgba(150,32,54,0.04), transparent 55%),
+      radial-gradient(ellipse at 85% 85%, rgba(154,119,33,0.035), transparent 55%);
   }
   .card {
-    background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+    background: var(--bg-2);
     border: 1px solid var(--line);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 1px 6px rgba(0,0,0,0.02);
   }
   .card-hover:hover {
     border-color: rgba(169,36,58,0.55);
@@ -372,10 +373,11 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
   }
   .btn:hover { border-color: var(--crimson); background: var(--bg-3); }
   .btn.primary {
-    background: linear-gradient(180deg, #8a1d2f, #6f1524);
-    border-color: #a9243a;
+    background: linear-gradient(180deg, #962036, #7c1a2c);
+    border-color: #7c1a2c;
+    color: #ffffff;
   }
-  .btn.primary:hover { background: linear-gradient(180deg, #a9243a, #8a1d2f); }
+  .btn.primary:hover { background: linear-gradient(180deg, #b42845, #962036); color: #ffffff; }
   .btn.ghost { background: transparent; }
   .link-crimson { color: var(--crimson-bright); border-bottom: 1px dotted var(--crimson); }
   .link-crimson:hover { color: #ee6278; border-bottom-color: #ee6278; }
@@ -385,10 +387,10 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
     color: var(--ink-dim); font-size: 13px; letter-spacing: 0.03em;
     cursor: pointer; transition: all 120ms;
   }
-  .nav-item:hover { color: var(--ink); background: rgba(255,255,255,0.02); }
+  .nav-item:hover { color: var(--ink); background: rgba(0,0,0,0.03); }
   .nav-item.active {
     color: var(--ink); border-left-color: var(--crimson);
-    background: linear-gradient(90deg, rgba(169,36,58,0.1), transparent);
+    background: linear-gradient(90deg, rgba(150,32,54,0.06), transparent);
   }
   .nav-num { color: var(--ink-mute); font-family: 'JetBrains Mono', monospace; font-size: 10px; width: 20px; }
   .section-title { display: flex; align-items: baseline; gap: 16px; }
@@ -402,16 +404,16 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
     font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
     font-family: 'JetBrains Mono', monospace;
   }
-  .tag.base { background: rgba(201,169,106,0.08); color: var(--gold); border: 1px solid rgba(201,169,106,0.2); }
-  .tag.tech { background: rgba(169,36,58,0.1); color: var(--crimson-bright); border: 1px solid rgba(169,36,58,0.3); }
-  .tag.adv  { background: rgba(120,80,170,0.1); color: #b291d9; border: 1px solid rgba(120,80,170,0.3); }
-  .tag.tafti { background: #1a0005; color: #ee6278; border: 1px solid rgba(169,36,58,0.5); }
+  .tag.base { background: rgba(154,119,33,0.08); color: var(--gold); border: 1px solid rgba(154,119,33,0.25); }
+  .tag.tech { background: rgba(150,32,54,0.08); color: var(--crimson); border: 1px solid rgba(150,32,54,0.25); }
+  .tag.adv  { background: rgba(90,60,140,0.08); color: #5a3c8c; border: 1px solid rgba(90,60,140,0.25); }
+  .tag.tafti { background: rgba(150,32,54,0.06); color: var(--crimson); border: 1px solid rgba(150,32,54,0.4); }
   .timeline-dot {
     width: 10px; height: 10px; border-radius: 50%;
-    background: var(--crimson); box-shadow: 0 0 0 4px rgba(169,36,58,0.15);
+    background: var(--crimson); box-shadow: 0 0 0 4px rgba(150,32,54,0.12);
   }
-  .timeline-dot.tafti { background: var(--gold); box-shadow: 0 0 0 4px rgba(201,169,106,0.18); }
-  .glow-border { box-shadow: inset 0 0 0 1px rgba(169,36,58,0.25), 0 0 40px rgba(169,36,58,0.06); }
+  .timeline-dot.tafti { background: var(--gold); box-shadow: 0 0 0 4px rgba(154,119,33,0.15); }
+  .glow-border { box-shadow: inset 0 0 0 1px rgba(150,32,54,0.2), 0 0 30px rgba(150,32,54,0.05); }
   .week-cell {
     aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -419,14 +421,14 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
     color: var(--ink-dim); cursor: pointer; transition: all 120ms;
   }
   .week-cell:hover { border-color: var(--crimson); color: var(--ink); }
-  .week-cell.done { background: rgba(169,36,58,0.18); color: #ee6278; border-color: var(--crimson); }
-  .week-cell.current { border-color: var(--gold); color: var(--gold); }
+  .week-cell.done { background: rgba(150,32,54,0.12); color: var(--crimson); border-color: var(--crimson); }
+  .week-cell.current { border-color: var(--gold); color: var(--gold); background: rgba(154,119,33,0.08); }
   details > summary { list-style: none; cursor: pointer; }
   details > summary::-webkit-details-marker { display: none; }
   details[open] > summary .chevron { transform: rotate(90deg); }
   .chevron { transition: transform 150ms; display: inline-block; }
   textarea, input, select {
-    background: var(--bg-1); border: 1px solid var(--line); color: var(--ink);
+    background: #ffffff; border: 1px solid var(--line); color: var(--ink);
     padding: 10px 12px; border-radius: 2px; font-family: inherit; font-size: 14px;
     width: 100%;
   }
@@ -454,8 +456,8 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
     100% { background-position: 200% 0; }
   }
   @keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(169,36,58,0.0), 0 0 24px 0 rgba(201,169,106,0.04); }
-    50%      { box-shadow: 0 0 0 4px rgba(169,36,58,0.10), 0 0 48px 8px rgba(201,169,106,0.10); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(150,32,54,0.0), 0 0 24px 0 rgba(154,119,33,0.04); }
+    50%      { box-shadow: 0 0 0 4px rgba(150,32,54,0.08), 0 0 40px 6px rgba(154,119,33,0.08); }
   }
   @keyframes twinkle {
     0%, 100% { opacity: 0.15; transform: scale(1); }
@@ -601,8 +603,8 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
+    background: rgba(26,26,28,0.35);
+    backdrop-filter: blur(3px);
     z-index: 80;
   }
 
@@ -616,7 +618,7 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
       z-index: 85;
       width: 280px !important;
       max-width: 85vw;
-      box-shadow: 0 0 40px rgba(0,0,0,0.6);
+      box-shadow: 0 0 30px rgba(0,0,0,0.15);
     }
     aside.sidebar.open { transform: translateX(0); }
 
@@ -648,6 +650,33 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
     /* Griglie → singola colonna */
     .grid.grid-cols-2, .grid.grid-cols-3, .grid.grid-cols-4 { grid-template-columns: 1fr !important; }
     .md\:grid-cols-2, .md\:grid-cols-3 { grid-template-columns: 1fr !important; }
+
+    /* Glossario: la griglia arbitraria [1fr_400px] diventa singola colonna */
+    .grid.grid-cols-\[1fr_400px\] { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+
+    /* Aside del glossario: niente più sticky su mobile, diventa blocco normale sopra la lista */
+    aside.sticky.top-24 { position: static !important; top: auto !important; }
+
+    /* Card del glossario: padding ridotto + width fluida */
+    aside .card.p-6, aside .card.p-8 { padding: 1rem !important; width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; }
+    aside .card .text-3xl { font-size: 1.5rem !important; word-break: break-word; }
+
+    /* Chip lista link collegati: wrap forzato */
+    .flex.flex-wrap.gap-2 { gap: 0.4rem !important; }
+    .chip { font-size: 10px !important; padding: 2px 8px !important; }
+
+    /* Lista glossario: padding compatto */
+    .px-3.py-2 { padding: 0.5rem 0.3rem !important; }
+
+    /* Forza tutti i card nell'aside a rimanere entro il viewport */
+    aside { max-width: 100% !important; width: 100% !important; }
+
+    /* Glossario: card placeholder "Seleziona un concetto" nascosta su mobile */
+    .glossary-empty { display: none !important; }
+
+    /* Glossario aside: appare DOPO la lista e scrolla automaticamente in vista */
+    aside.glossary-aside { order: 2; margin-top: 1.5rem; }
+    aside.glossary-aside .card { margin-bottom: 1rem; }
 
     /* TopBar: spazio per il bottone hamburger */
     .topbar { padding-left: 64px !important; padding-right: 16px !important; padding-top: 0.6rem !important; padding-bottom: 0.6rem !important; }
@@ -888,7 +917,7 @@ function TopBar({
   return /*#__PURE__*/React.createElement("div", {
     className: "topbar sticky top-0 z-20 px-10 py-4 flex items-center justify-between",
     style: {
-      background: 'rgba(11,10,12,0.85)',
+      background: 'rgba(250,250,248,0.88)',
       backdropFilter: 'blur(10px)',
       borderBottom: '1px solid var(--line)'
     }
@@ -2448,7 +2477,15 @@ function Glossario() {
         background: sel === g.id ? 'var(--bg-2)' : 'transparent',
         borderLeft: sel === g.id ? '2px solid var(--crimson)' : '2px solid transparent'
       },
-      onClick: () => setSel(g.id)
+      onClick: () => {
+        setSel(g.id);
+        if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+          setTimeout(() => {
+            const el = document.querySelector('.glossary-aside');
+            if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 60);
+        }
+      }
     }, /*#__PURE__*/React.createElement("div", {
       className: "flex-1"
     }, /*#__PURE__*/React.createElement("div", {
@@ -2470,9 +2507,9 @@ function Glossario() {
       color: 'var(--ink-mute)'
     }
   }, "Nessun concetto trovato.")), /*#__PURE__*/React.createElement("aside", {
-    className: "sticky top-24 self-start"
+    className: "sticky top-24 self-start glossary-aside"
   }, !selected && /*#__PURE__*/React.createElement("div", {
-    className: "card p-8 text-center"
+    className: "card p-8 text-center glossary-empty"
   }, /*#__PURE__*/React.createElement("div", {
     className: "quote-mark mb-2"
   }, "\u201C"), /*#__PURE__*/React.createElement("div", {
@@ -4863,12 +4900,12 @@ function SiteGate({ onUnlock }) {
     finally { setChecking(false); }
   };
   return /*#__PURE__*/React.createElement("div", {
-    style: { position: 'fixed', inset: 0, zIndex: 200, background: 'radial-gradient(ellipse at center, #17181d 0%, #0a0b0f 70%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }
+    style: { position: 'fixed', inset: 0, zIndex: 200, background: 'radial-gradient(ellipse at center, #ffffff 0%, #f2f0ec 70%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }
   }, /*#__PURE__*/React.createElement("div", {
     className: "card p-10 glow-border fade-in",
     style: { width: 'min(460px,100%)', position: 'relative', overflow: 'hidden' }
   }, /*#__PURE__*/React.createElement("div", {
-    style: { position: 'absolute', top: '-60px', right: '-60px', width: '200px', height: '200px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%)', pointerEvents: 'none' }
+    style: { position: 'absolute', top: '-60px', right: '-60px', width: '200px', height: '200px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(154,119,33,0.10) 0%, transparent 70%)', pointerEvents: 'none' }
   }), /*#__PURE__*/React.createElement("div", {
     className: "text-xs mono uppercase tracking-widest mb-3",
     style: { color: 'var(--gold-dim)' }
