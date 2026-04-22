@@ -1812,148 +1812,298 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
     z-index: 80;
   }
 
+  /* =========================================================
+     MOBILE — preserva identità cosmica, corregge solo layout
+     Principio: NON toccare i gradienti card né le glow dorate.
+     Solo layout, safe-area iOS, touch target, text scaling.
+     ========================================================= */
   @media (max-width: 768px) {
     .mobile-menu-btn { display: flex; }
     .mobile-nav-overlay.open { display: block; }
 
+    /* ---------- LAYOUT FLUSSO ---------- */
+    html, body { max-width: 100vw; overflow-x: hidden; }
+    body {
+      padding-bottom: env(safe-area-inset-bottom, 0);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* Sidebar: off-canvas con transizione */
     aside.sidebar {
       transform: translateX(-100%);
-      transition: transform 0.28s ease;
+      transition: transform 0.32s cubic-bezier(.2,.9,.2,1);
       z-index: 85;
-      width: 280px !important;
-      max-width: 85vw;
-      box-shadow: 0 0 30px rgba(0,0,0,0.15);
+      width: min(300px, 82vw) !important;
+      max-width: 82vw !important;
+      box-shadow: 0 0 60px rgba(0,0,0,0.7), 0 0 120px rgba(124,58,237,0.08);
+      padding-top: calc(20px + env(safe-area-inset-top, 0)) !important;
     }
     aside.sidebar.open { transform: translateX(0); }
 
+    /* Main: reset margini desktop */
     main.app-main {
       margin-left: 0 !important;
       max-width: 100vw !important;
+      width: 100vw !important;
     }
-    main.app-main > div.content-pad {
-      padding-left: 1rem !important;
-      padding-right: 1rem !important;
-      padding-top: 3.5rem !important;
-      padding-bottom: 2rem !important;
+    main.app-main > div.content-pad,
+    main.app-main > div[class*="ml-"],
+    main.app-main > div[class*="max-w-"] {
+      padding-left: 1.1rem !important;
+      padding-right: 1.1rem !important;
+      padding-top: calc(3.4rem + env(safe-area-inset-top, 0)) !important;
+      padding-bottom: 2.5rem !important;
       max-width: 100% !important;
+      width: 100% !important;
       margin-left: 0 !important;
       margin-right: 0 !important;
     }
-    .topbar-tight {
+    .topbar-tight, .content-pad, .neural-scene {
       max-width: 100% !important;
       margin-left: 0 !important;
       margin-right: 0 !important;
     }
 
-    /* Hero / headings shrink */
-    h1.text-6xl, .text-6xl { font-size: 2.2rem !important; line-height: 1.05 !important; }
-    h2.text-5xl, .text-5xl { font-size: 1.9rem !important; }
-    h2.text-4xl, .text-4xl { font-size: 1.6rem !important; }
-    h2.text-3xl, .text-3xl { font-size: 1.35rem !important; }
-    .text-2xl { font-size: 1.2rem !important; }
-    .text-xl { font-size: 1.05rem !important; }
+    /* ---------- TOPBAR ---------- */
+    .topbar {
+      padding-left: 62px !important;
+      padding-right: 14px !important;
+      padding-top: calc(0.6rem + env(safe-area-inset-top, 0)) !important;
+      padding-bottom: 0.6rem !important;
+      /* NON sovrascrivo il gradiente originale — usa --bg-1 */
+    }
+    .topbar .text-lg { font-size: 0.95rem !important; letter-spacing: 0.1em; }
+    .topbar .text-\[11px\], .topbar .text-xs { display: none; }
+
+    .mobile-menu-btn {
+      top: calc(13px + env(safe-area-inset-top, 0));
+      left: 12px;
+      width: 44px; height: 44px;
+    }
+
+    /* ---------- TIPOGRAFIA ---------- */
+    h1.text-6xl, .text-6xl { font-size: 2.15rem !important; line-height: 1.08 !important; letter-spacing: 0.01em; }
+    h2.text-5xl, .text-5xl { font-size: 1.8rem !important; line-height: 1.15 !important; }
+    h2.text-4xl, .text-4xl { font-size: 1.55rem !important; line-height: 1.2 !important; }
+    h2.text-3xl, .text-3xl { font-size: 1.35rem !important; line-height: 1.25 !important; }
+    .text-2xl { font-size: 1.18rem !important; }
+    .text-xl { font-size: 1.08rem !important; }
     .text-lg { font-size: 1rem !important; }
+    p { line-height: 1.65; }
+    .serif, p, span, div { word-wrap: break-word; overflow-wrap: break-word; hyphens: auto; }
+    pre, code { white-space: pre-wrap !important; word-break: break-word; }
 
-    /* Padding dei card ridotto */
-    .card.p-10 { padding: 1.2rem !important; }
-    .card.p-8 { padding: 1rem !important; }
-    .card.p-6 { padding: 0.9rem !important; }
+    /* ---------- PADDING CARD ---------- */
+    .p-12 { padding: 1.35rem !important; }
+    .p-10, .card.p-10 { padding: 1.25rem !important; }
+    .p-8, .card.p-8 { padding: 1.1rem !important; }
+    .p-6, .card.p-6 { padding: 0.95rem !important; }
 
-    /* Griglie → singola colonna */
-    .grid.grid-cols-2, .grid.grid-cols-3, .grid.grid-cols-4 { grid-template-columns: 1fr !important; }
-    .md\:grid-cols-2, .md\:grid-cols-3 { grid-template-columns: 1fr !important; }
+    /* ---------- GRIGLIE → 1 COLONNA ---------- */
+    .grid.grid-cols-2, .grid.grid-cols-3, .grid.grid-cols-4,
+    .grid.grid-cols-5, .grid.grid-cols-6,
+    .md\:grid-cols-2, .md\:grid-cols-3, .md\:grid-cols-4,
+    .sm\:grid-cols-2, .sm\:grid-cols-3, .sm\:grid-cols-4,
+    .lg\:grid-cols-2, .lg\:grid-cols-3, .lg\:grid-cols-4 {
+      grid-template-columns: 1fr !important;
+    }
+    .grid.grid-cols-\[1fr_400px\],
+    .grid.grid-cols-\[400px_1fr\],
+    .grid.grid-cols-\[1fr_380px\],
+    .grid.grid-cols-\[380px_1fr\],
+    .grid.grid-cols-\[1fr_320px\],
+    .grid.grid-cols-\[320px_1fr\],
+    .grid.grid-cols-\[1fr_280px\],
+    .grid.grid-cols-\[280px_1fr\],
+    .grid.grid-cols-\[1fr_360px\],
+    .grid[class*="grid-cols-\["] {
+      grid-template-columns: 1fr !important;
+      gap: 1.1rem !important;
+    }
+    .grid.grid-cols-\[120px_1fr\],
+    .grid.grid-cols-\[100px_1fr\],
+    .grid.grid-cols-\[140px_1fr\],
+    .grid.grid-cols-\[40px_1fr\],
+    .grid.grid-cols-\[auto_1fr\] {
+      grid-template-columns: 1fr !important;
+      gap: 0.4rem !important;
+    }
 
-    /* Glossario: la griglia arbitraria [1fr_400px] diventa singola colonna */
-    .grid.grid-cols-\[1fr_400px\] { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
-
-    /* Aside del glossario: niente più sticky su mobile, diventa blocco normale sopra la lista */
-    aside.sticky.top-24 { position: static !important; top: auto !important; }
-
-    /* Card del glossario: padding ridotto + width fluida */
-    aside .card.p-6, aside .card.p-8 { padding: 1rem !important; width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; }
-    aside .card .text-3xl { font-size: 1.5rem !important; word-break: break-word; }
-
-    /* Chip lista link collegati: wrap forzato */
+    /* Gap ridotti */
+    .grid.gap-6, .grid.gap-8 { gap: 1rem !important; }
+    .grid.gap-x-6, .grid.gap-x-8 { column-gap: 0.8rem !important; }
+    .grid.gap-4 { gap: 0.75rem !important; }
+    .flex.gap-6, .flex.gap-8 { gap: 0.9rem !important; }
+    .flex.gap-4, .flex.gap-5 { gap: 0.7rem !important; }
+    .flex.gap-3 { gap: 0.55rem !important; }
     .flex.flex-wrap.gap-2 { gap: 0.4rem !important; }
-    .chip { font-size: 10px !important; padding: 2px 8px !important; }
+    .flex.flex-wrap.gap-3 { gap: 0.45rem !important; }
 
-    /* Lista glossario: padding compatto */
-    .px-3.py-2 { padding: 0.5rem 0.3rem !important; }
-
-    /* Forza tutti i card nell'aside a rimanere entro il viewport */
+    /* Aside non sticky su mobile */
+    aside.sticky, aside.sticky.top-24, .sticky.top-24, [class*="sticky"]:not(.topbar) {
+      position: static !important;
+      top: auto !important;
+    }
     aside { max-width: 100% !important; width: 100% !important; }
-
-    /* Glossario: card placeholder "Seleziona un concetto" nascosta su mobile */
+    aside .card .text-3xl { font-size: 1.45rem !important; word-break: break-word; }
+    aside.glossary-aside { order: 2; margin-top: 1.2rem; }
+    aside.glossary-aside .card { margin-bottom: 0.8rem; }
     .glossary-empty { display: none !important; }
 
-    /* Glossario aside: appare DOPO la lista e scrolla automaticamente in vista */
-    aside.glossary-aside { order: 2; margin-top: 1.5rem; }
-    aside.glossary-aside .card { margin-bottom: 1rem; }
+    /* ---------- CHIP & TAG ---------- */
+    .chip, .tag {
+      font-size: 10.5px !important;
+      padding: 3px 9px !important;
+      white-space: nowrap;
+    }
+    .px-3.py-2 { padding: 0.6rem 0.5rem !important; min-height: 44px; display: flex; align-items: center; }
 
-    /* TopBar: spazio per il bottone hamburger */
-    .topbar { padding-left: 64px !important; padding-right: 16px !important; padding-top: 0.6rem !important; padding-bottom: 0.6rem !important; }
-    .topbar .text-lg { font-size: 1rem !important; }
-    .topbar .text-\[11px\] { display: none; }
+    /* ---------- TOUCH TARGET (iOS 44px) ---------- */
+    .btn, button, [role="button"] { min-height: 44px !important; }
+    .btn { padding: 0.75rem 1.1rem !important; }
+    input, select, textarea {
+      min-height: 44px !important;
+      font-size: 16px !important; /* evita zoom iOS su focus */
+    }
+    textarea { min-height: 80px !important; }
 
-    /* Footer ridimensionato */
-    footer.mt-20 { padding: 2rem 1rem !important; margin-top: 3rem !important; }
+    /* Media mai oltre viewport */
+    img, svg, canvas { max-width: 100%; height: auto; }
+    svg[viewBox] { width: 100%; height: auto; }
+
+    /* ---------- FOOTER ---------- */
+    footer.mt-20 {
+      padding: 2rem 1.1rem !important;
+      margin-top: 2.8rem !important;
+    }
     footer .text-right { text-align: left !important; }
+    footer .flex.flex-wrap { flex-direction: column; gap: 1rem !important; align-items: flex-start !important; }
 
-    /* Tasti più grandi da toccare */
-    .btn { padding: 0.7rem 1rem !important; min-height: 44px; }
-
-    /* Immagini mai oltre il viewport */
-    img, svg { max-width: 100%; height: auto; }
-
-    /* Evita flex che sfora */
-    .flex.gap-6, .flex.gap-8 { gap: 1rem !important; }
-
-    /* Testi lunghi che rompono il layout: permettiamo word-break */
-    body { overflow-x: hidden; }
-    .serif, p, span, div { word-wrap: break-word; overflow-wrap: break-word; }
-
-    /* Chat interface — compattata */
-    .chat-body { padding: 0.5rem !important; }
-
-    /* Mobile: riduci il backdrop-filter per risparmiare batteria e mantenere 60fps */
-    .card {
-      backdrop-filter: blur(8px) saturate(130%) !important;
-      -webkit-backdrop-filter: blur(8px) saturate(130%) !important;
-      background: linear-gradient(135deg, rgba(30,20,60,0.72), rgba(20,14,50,0.68)) !important;
+    /* ---------- NAV-NUM ---------- */
+    .nav-num {
+      width: 28px !important;
+      font-size: 11px !important;
+      min-height: 32px;
     }
-    aside.sidebar {
-      backdrop-filter: blur(14px) saturate(140%) !important;
-      -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
-      background: linear-gradient(180deg, rgba(10,6,26,0.96), rgba(8,4,20,0.94)) !important;
+
+    /* ---------- QUOTE ---------- */
+    .quote-mark { font-size: 56px !important; line-height: 1 !important; }
+
+    /* ---------- BRAND SIGIL (stella david) ---------- */
+    .brand-sigil { width: 46px !important; height: 46px !important; top: 10px; right: 12px; }
+
+    /* ---------- PERFORMANCE FX (ma NON nuking) ---------- */
+    /* Canvas cosmic: lieve riduzione opacity — mantiene l'effetto */
+    .cosmic-bg canvas { opacity: 0.78 !important; }
+    /* Nebula: blur leggermente più economico */
+    .cosmic-bg .nebula-gradient { filter: blur(50px) !important; opacity: 0.85; }
+    /* Portal ring resta visibile, solo scalato */
+    .portal-ring::before { transform: scale(0.7) !important; opacity: 0.85; }
+    /* Orbit animations: raggio ridotto */
+    :root { --r: 36px; }
+
+    /* NO hover su touch */
+    .card-hover:hover { transform: none !important; box-shadow: inherit !important; }
+
+    /* ---------- TABLE → scroll orizzontale ---------- */
+    table {
+      display: block;
+      overflow-x: auto;
+      width: 100%;
+      -webkit-overflow-scrolling: touch;
     }
-    .topbar {
-      background: linear-gradient(180deg, rgba(10,6,26,0.88), rgba(10,6,26,0.76)) !important;
-      backdrop-filter: blur(12px) saturate(140%) !important;
-      -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+
+    /* Max-width esplicite → fluide */
+    select, .max-w-\[240px\], .max-w-\[280px\], .max-w-\[320px\],
+    .max-w-2xl, .max-w-3xl, .max-w-5xl {
+      max-width: 100% !important;
     }
-    /* Mobile: riduci intensity dei glow per prestazioni */
-    .card-hover:hover { box-shadow: 0 20px 40px -20px rgba(236,72,153,0.3) !important; transform: none !important; }
-    /* Testo più leggibile su schermi piccoli */
-    body { font-size: 15px; line-height: 1.55; }
-    p { line-height: 1.6; }
-    /* Portal-ring: disabilitato su mobile (occupava spazio a sinistra) */
-    .portal-ring::before { display: none; }
-    /* Brand sigil su mobile — comunque più grande di prima */
-    .brand-sigil { width: 56px; height: 56px; top: 6px; right: 8px; }
-    /* Nebula gradient meno intenso per non sbiadire il contenuto */
-    .cosmic-bg .nebula-gradient { filter: blur(50px) !important; opacity: 0.8; }
+
+    /* Pill wrap */
+    .flex.items-center.gap-2, .flex.items-center.gap-3 { flex-wrap: wrap; }
+
+    /* Sidebar brand title */
+    aside.sidebar h1, aside.sidebar .serif { font-size: 1.3rem !important; word-break: break-word; }
+
+    /* Chat body */
+    .chat-body { padding: 0.55rem !important; }
+
+    /* ---------- ml-72 / ml-80 → reset ---------- */
+    .ml-72, .ml-80 { margin-left: 0 !important; }
+    .max-w-\[calc\(100vw-18rem\)\] { max-width: 100% !important; }
   }
 
-  /* Very-small screens: shrink ulteriore */
-  @media (max-width: 420px) {
+  /* =========================================================
+     TABLET PORTRAIT (481-768px): padding più generoso
+     ========================================================= */
+  @media (min-width: 481px) and (max-width: 768px) {
+    main.app-main > div.content-pad {
+      padding-left: 1.6rem !important;
+      padding-right: 1.6rem !important;
+    }
+    h1.text-6xl, .text-6xl { font-size: 2.4rem !important; }
+  }
+
+  /* =========================================================
+     PHONE (<=480px)
+     ========================================================= */
+  @media (max-width: 480px) {
+    main.app-main > div.content-pad {
+      padding-left: 0.9rem !important;
+      padding-right: 0.9rem !important;
+    }
+    h1.text-6xl, .text-6xl { font-size: 1.85rem !important; line-height: 1.06 !important; }
+    h2.text-5xl, .text-5xl { font-size: 1.6rem !important; }
+    h2.text-4xl, .text-4xl { font-size: 1.4rem !important; }
+    .p-10, .card.p-10 { padding: 1.05rem !important; }
+    .p-8, .card.p-8 { padding: 0.9rem !important; }
+    .p-6, .card.p-6 { padding: 0.85rem !important; }
+    body { font-size: 14.8px; }
+    .topbar { padding-left: 58px !important; }
+    .mobile-menu-btn {
+      top: calc(11px + env(safe-area-inset-top, 0));
+      left: 11px;
+      width: 42px; height: 42px;
+    }
+    .brand-sigil { width: 40px !important; height: 40px !important; top: 8px; right: 8px; }
+    .chip, .tag { font-size: 10px !important; padding: 2px 7px !important; }
+    .quote-mark { font-size: 48px !important; }
+  }
+
+  /* =========================================================
+     iPhone SE / piccolissimi (<=375px)
+     ========================================================= */
+  @media (max-width: 375px) {
     main.app-main > div.content-pad {
       padding-left: 0.75rem !important;
       padding-right: 0.75rem !important;
     }
-    h1.text-6xl, .text-6xl { font-size: 1.85rem !important; }
-    h2.text-5xl, .text-5xl { font-size: 1.6rem !important; }
-    .card.p-10 { padding: 1rem !important; }
-    .card.p-8 { padding: 0.9rem !important; }
+    h1.text-6xl, .text-6xl { font-size: 1.7rem !important; }
+    h2.text-5xl, .text-5xl { font-size: 1.45rem !important; }
+    aside.sidebar { width: min(270px, 85vw) !important; max-width: 85vw !important; }
+    .brand-sigil { width: 36px !important; height: 36px !important; }
+  }
+
+  /* =========================================================
+     LANDSCAPE phones (iPhone orizzontale)
+     ========================================================= */
+  @media (max-width: 932px) and (orientation: landscape) and (max-height: 500px) {
+    h1.text-6xl, .text-6xl { font-size: 1.65rem !important; }
+    .p-10, .card.p-10 { padding: 0.95rem !important; }
+    main.app-main > div.content-pad { padding-top: 3rem !important; }
+  }
+
+  /* =========================================================
+     prefers-reduced-motion: rispetta l'utente
+     ========================================================= */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .cosmic-bg canvas, .portal-ring::before { display: none; }
   }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
