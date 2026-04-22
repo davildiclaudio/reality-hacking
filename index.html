@@ -1948,6 +1948,19 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
     filter: blur(0);
   }
 
+  /* Layout principale: margin-left solo su desktop (sopra 768px).
+     Su mobile la sidebar è off-canvas e non occupa spazio. */
+  .app-main-layout {
+    margin-left: 11.5rem;
+    max-width: calc(100vw - 11.5rem);
+  }
+  @media (max-width: 768px) {
+    .app-main-layout {
+      margin-left: 0 !important;
+      max-width: 100vw !important;
+      width: 100vw !important;
+    }
+  }
   /* Assicura che il contenuto sia sopra al cosmic-bg */
   aside.sidebar, main.app-main, footer, .mobile-menu-btn, .mobile-nav-overlay {
     position: relative;
@@ -2533,6 +2546,35 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
       transition-duration: 0.01ms !important;
     }
     .cosmic-bg canvas, .portal-ring::before { display: none; }
+  }
+
+  /* Portal intro — alleggerimento mobile per eliminare stuttering del logo.
+     Su phone i layers 260-300vmax con blur(14-26px) + conic-gradient + rotazioni
+     infinite saturano il compositor e fanno "saltare" il disegno del sigillo.
+     Strategia: rimuovo raggi e nebula-pulse, semplifico aurora (niente spin). */
+  @media (max-width: 768px) {
+    .portal-rays { display: none !important; }
+    .portal-aurora {
+      width: 180vmax !important;
+      height: 180vmax !important;
+      filter: blur(18px) !important;
+      animation: portal-aurora-in 2.2s ease-out 0.1s forwards !important;
+    }
+    .portal-nebula {
+      width: 160vmax !important;
+      height: 160vmax !important;
+      animation: portal-nebula-in 2s ease-out 0.35s forwards !important;
+    }
+    .portal-stars {
+      animation: portal-stars-in 1.4s ease-out 0.2s forwards !important;
+    }
+    .portal-sigil {
+      will-change: transform, opacity;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+    /* Riduco durate globali delle onde di anello (più reattivo, meno lavoro) */
+    .portal-ring-wave { filter: blur(1.5px) !important; }
   }
 
   /* =========================================================
@@ -3531,7 +3573,7 @@ function App() {
     setRoute: handleSetRoute,
     mobileNavOpen: mobileNavOpen
   }), /*#__PURE__*/React.createElement("main", {
-    className: "app-main flex-1 ml-[11.5rem] max-w-[calc(100vw-11.5rem)]"
+    className: "app-main app-main-layout flex-1"
   }, /*#__PURE__*/React.createElement(TopBar, {
     route: route,
     nav: nav
