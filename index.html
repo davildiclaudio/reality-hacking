@@ -2040,7 +2040,9 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
       line-height: 1.6;
     }
 
-    /* Sidebar: off-canvas con transizione */
+    /* Sidebar: off-canvas con transizione.
+       padding-top più ampio: lascia respirare "Ars Realis" sotto il pulsante hamburger
+       (il pulsante occupa 14px top + 44px = 58px verticali). */
     aside.sidebar {
       transform: translateX(-100%);
       transition: transform 0.32s cubic-bezier(.2,.9,.2,1);
@@ -2048,9 +2050,21 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
       width: min(300px, 82vw) !important;
       max-width: 82vw !important;
       box-shadow: 0 0 60px rgba(0,0,0,0.7), 0 0 120px rgba(124,58,237,0.08);
-      padding-top: calc(20px + env(safe-area-inset-top, 0)) !important;
+      padding-top: calc(66px + env(safe-area-inset-top, 0)) !important;
     }
     aside.sidebar.open { transform: translateX(0); }
+    /* Il pulsante hamburger quando il menu è aperto deve essere semi-trasparente
+       così "Ars Realis" (che sta sotto) resta leggibile */
+    .mobile-menu-btn.open {
+      background: linear-gradient(135deg, rgba(30,20,60,0.35), rgba(14,8,32,0.28)) !important;
+      border-color: rgba(180,150,240,0.28) !important;
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.05) !important;
+      backdrop-filter: blur(6px) !important;
+      -webkit-backdrop-filter: blur(6px) !important;
+      opacity: 0.82;
+    }
 
     /* Main: reset margini desktop */
     main.app-main {
@@ -2556,33 +2570,126 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
     .cosmic-bg canvas, .portal-ring::before { display: none; }
   }
 
-  /* Portal intro — alleggerimento mobile per eliminare stuttering del logo.
-     Su phone i layers 260-300vmax con blur(14-26px) + conic-gradient + rotazioni
-     infinite saturano il compositor e fanno "saltare" il disegno del sigillo.
-     Strategia: rimuovo raggi e nebula-pulse, semplifico aurora (niente spin). */
+  /* Portal intro — versione snella e fluida per mobile.
+     Regola principale: niente rotazioni infinite che saturano il compositor,
+     tempi compressi a ~metà rispetto al desktop, niente conic-gradient/raggi,
+     ring waves ridotti a 1 sola onda, layers più piccoli. */
   @media (max-width: 768px) {
     .portal-rays { display: none !important; }
+    .portal-vignette { animation-duration: 1.2s !important; animation-delay: 0.2s !important; }
     .portal-aurora {
-      width: 180vmax !important;
-      height: 180vmax !important;
-      filter: blur(18px) !important;
-      animation: portal-aurora-in 2.2s ease-out 0.1s forwards !important;
+      width: 150vmax !important;
+      height: 150vmax !important;
+      filter: blur(16px) !important;
+      /* Solo fade-in, niente spin infinito (compositor killer) */
+      animation: portal-aurora-in 1.4s ease-out 0.05s forwards !important;
     }
     .portal-nebula {
-      width: 160vmax !important;
-      height: 160vmax !important;
-      animation: portal-nebula-in 2s ease-out 0.35s forwards !important;
+      width: 130vmax !important;
+      height: 130vmax !important;
+      filter: blur(22px) !important;
+      /* Solo fade-in, niente pulse infinito */
+      animation: portal-nebula-in 1.3s ease-out 0.2s forwards !important;
     }
     .portal-stars {
-      animation: portal-stars-in 1.4s ease-out 0.2s forwards !important;
+      /* Solo fade-in, niente drift infinito (background-position = reflow continuo) */
+      animation: portal-stars-in 1s ease-out 0.1s forwards !important;
     }
+    .portal-spark {
+      /* Solo scintilla iniziale, niente breathe infinito */
+      animation: portal-spark-in 0.5s cubic-bezier(.2,.9,.3,1) 0.25s forwards !important;
+    }
+    /* Solo 1 onda ring invece di 3, più veloce */
+    .portal-ring-wave.ring-1 { animation-duration: 2.2s !important; animation-delay: 0.5s !important; filter: blur(1.5px) !important; }
+    .portal-ring-wave.ring-2 { display: none !important; }
+    .portal-ring-wave.ring-3 { display: none !important; }
     .portal-sigil {
+      width: 220px !important; height: 220px !important;
       will-change: transform, opacity;
       transform: translateZ(0);
       backface-visibility: hidden;
+      /* Disegno più veloce, niente rotazione 3D infinita */
+      animation: portal-sigil-in 0.5s ease 0.9s forwards !important;
     }
-    /* Riduco durate globali delle onde di anello (più reattivo, meno lavoro) */
-    .portal-ring-wave { filter: blur(1.5px) !important; }
+    /* Comprimere i tempi di draw sigillo (era ~4.95s totali → ora ~2.5s) */
+    .portal-sigil .ring-outer { animation-duration: 1.0s !important; animation-delay: 1.0s !important; }
+    .portal-sigil .ring-inner { animation-duration: 0.9s !important; animation-delay: 1.2s !important; }
+    .portal-sigil .tri-up     { animation-duration: 0.9s !important; animation-delay: 1.4s !important; }
+    .portal-sigil .tri-dn     { animation-duration: 0.9s !important; animation-delay: 1.65s !important; }
+    .portal-sigil .merkaba-depth.up-axis { animation-delay: 1.95s, 1.95s !important; animation-duration: 0.4s, 0.3s !important; }
+    .portal-sigil .merkaba-depth.up-l    { animation-delay: 2.05s, 2.05s !important; animation-duration: 0.4s, 0.3s !important; }
+    .portal-sigil .merkaba-depth.up-r    { animation-delay: 2.15s, 2.15s !important; animation-duration: 0.4s, 0.3s !important; }
+    .portal-sigil .merkaba-depth.dn-axis { animation-delay: 2.25s, 2.25s !important; animation-duration: 0.4s, 0.3s !important; }
+    .portal-sigil .merkaba-depth.dn-l    { animation-delay: 2.35s, 2.35s !important; animation-duration: 0.4s, 0.3s !important; }
+    .portal-sigil .merkaba-depth.dn-r    { animation-delay: 2.45s, 2.45s !important; animation-duration: 0.4s, 0.3s !important; }
+    .portal-sigil .rune-dot   { animation-delay: 2.55s !important; animation-duration: 0.3s !important; }
+    .portal-sigil .rune-dot.core { animation-delay: 2.65s !important; animation-duration: 0.3s !important; }
+  }
+
+  /* =========================================================
+     MOBILE — leggibilità & animazioni stabili
+     ========================================================= */
+  @media (max-width: 768px) {
+    /* Fix "past-view opaco persistente": su mobile NON abbassare l'opacità
+       delle sezioni già viste — restano nitide mentre si scrolla.
+       Su desktop il past-view fade è voluto, qui crea l'illusione di animazione
+       bloccata a metà. */
+    .reveal.past-view {
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+    }
+    /* Reveal stabile: se qualcosa va storto, dopo 900ms forza full opacity */
+    .reveal {
+      animation: revealMobileFallback 0.01s linear 1.2s forwards;
+    }
+    @keyframes revealMobileFallback {
+      to { opacity: 1; filter: blur(0); transform: translate3d(0,0,0) scale(1); }
+    }
+    .reveal.in-view {
+      opacity: 1 !important;
+      filter: blur(0) !important;
+      transform: translate3d(0, 0, 0) scale(1) !important;
+    }
+
+    /* "Cassetti" per leggibilità testo:
+       Paragrafi body lunghi ottengono un pannello sfumato scuro che li stacca
+       dallo sfondo cosmico. NON tocco testi dentro card (già hanno bg) né chip. */
+    .content-pad > .reveal p.serif,
+    .content-pad > .reveal .serif > p,
+    .content-pad .prose-readable p,
+    .content-pad p.mobile-cassetto {
+      background: linear-gradient(180deg, rgba(14,8,32,0.55), rgba(8,5,22,0.42));
+      border: 1px solid rgba(180,150,240,0.10);
+      border-radius: 10px;
+      padding: 0.7rem 0.85rem;
+      margin: 0.55rem 0;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.28);
+    }
+    /* Testo con ombra leggera → emerge dallo sfondo animato */
+    .content-pad p, .content-pad li, .content-pad .serif {
+      text-shadow: 0 1px 2px rgba(0,0,0,0.55);
+    }
+    .content-pad h1, .content-pad h2, .content-pad h3, .content-pad h4 {
+      text-shadow: 0 2px 6px rgba(0,0,0,0.65), 0 0 14px rgba(0,0,0,0.35);
+    }
+    /* Rinforzo contrasto card su mobile (+8% opacità background) */
+    .card {
+      background: linear-gradient(135deg, rgba(30,20,60,0.72), rgba(20,14,50,0.62)) !important;
+      border-color: rgba(180,150,240,0.22) !important;
+    }
+
+    /* Canvas 2D bolle: qualche device iOS pixelizza se il canvas è troppo
+       grande per la GPU. Cap del canvas con image-rendering auto. */
+    .cosmic-bg canvas.particles-canvas {
+      image-rendering: auto !important;
+      opacity: 0.68 !important;
+    }
+    .cosmic-bg canvas.three-canvas {
+      image-rendering: auto !important;
+    }
   }
 
   /* =========================================================
@@ -3142,8 +3249,8 @@ function MysticBackground() {
     }
     const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = window.innerWidth < 768;
-    const starScale = isMobile ? 0.45 : 1; // meno stelle su mobile per fluidità
-    const variantCount = isMobile ? 16 : 28;
+    const starScale = isMobile ? 0.28 : 1; // molto meno stelle su mobile per evitare stuttering
+    const variantCount = isMobile ? 9 : 28;  // meno bolle → meno pressione GPU
 
     // -------------------------------------------------------
     // THREE.JS — scena 3D profonda
@@ -3155,12 +3262,34 @@ function MysticBackground() {
     const camera = new THREE.PerspectiveCamera(68, window.innerWidth / window.innerHeight, 0.1, 2000);
     camera.position.z = 320;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    const renderer = new THREE.WebGLRenderer({
+      antialias: !isMobile, // antialias OFF su mobile per fluidità
+      alpha: true,
+      powerPreference: 'high-performance',
+      failIfMajorPerformanceCaveat: false
+    });
+    // Cap DPR: su mobile massimo 1.25 per ridurre carico GPU ed evitare
+    // pixelation da WebGL context loss (iOS Safari)
+    const maxDpr = isMobile ? 1.25 : 2;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxDpr));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0);
     renderer.domElement.className = 'three-canvas';
     host.appendChild(renderer.domElement);
+
+    // Recovery da WebGL context loss (iOS Safari lo perde spesso quando
+    // la memoria GPU è sotto pressione — causa "icona fantasma" bolle)
+    const canvasEl = renderer.domElement;
+    function onContextLost(e) {
+      e.preventDefault();
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+    function onContextRestored() {
+      if (!paused) tick();
+    }
+    canvasEl.addEventListener('webglcontextlost', onContextLost, false);
+    canvasEl.addEventListener('webglcontextrestored', onContextRestored, false);
 
     // ---- Starfield profondo (3 strati) ----
     function makeStars(count, spread, size, color) {
@@ -3242,9 +3371,9 @@ function MysticBackground() {
     sacredGroup.position.set(0, 0, -40);
     scene.add(sacredGroup);
 
-    // ---- Particelle energetiche orbitanti ----
+    // ---- Particelle energetiche orbitanti (meno su mobile) ----
     const orbGeo = new THREE.BufferGeometry();
-    const ORBS = 140;
+    const ORBS = isMobile ? 55 : 140;
     const orbPos = new Float32Array(ORBS * 3);
     const orbSeed = [];
     for (let i = 0; i < ORBS; i++) {
@@ -3350,17 +3479,24 @@ function MysticBackground() {
     let pRaf = null;
     const variants = [];
     if (pcanvas) {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // Cap DPR a 1.25 su mobile: evita "bolle pixelate" dovute a canvas
+      // oversized che la GPU downscala in modo lossy
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 2);
       function resizeP() {
-        pcanvas.width = window.innerWidth * dpr;
-        pcanvas.height = window.innerHeight * dpr;
+        pcanvas.width = Math.round(window.innerWidth * dpr);
+        pcanvas.height = Math.round(window.innerHeight * dpr);
         pcanvas.style.width = window.innerWidth + 'px';
         pcanvas.style.height = window.innerHeight + 'px';
+        if (pctx) {
+          // Reset transform prima di riscalare (altrimenti lo scale si accumula)
+          pctx.setTransform(1, 0, 0, 1, 0, 0);
+          pctx.scale(dpr, dpr);
+        }
       }
+      pctx = pcanvas.getContext('2d');
+      // resizeP applica setTransform + scale correttamente dopo aver settato width/height
       resizeP();
       window.addEventListener('resize', resizeP);
-      pctx = pcanvas.getContext('2d');
-      pctx.scale(dpr, dpr);
       const palette = ['rgba(124,58,237,', 'rgba(236,72,153,', 'rgba(34,211,238,', 'rgba(244,201,93,', 'rgba(167,139,250,'];
       for (let i = 0; i < variantCount; i++) {
         variants.push({
@@ -3555,8 +3691,8 @@ function App() {
   return /*#__PURE__*/React.createElement("div", {
     className: "flex min-h-screen noise"
   }, /*#__PURE__*/React.createElement(MysticBackground, null), /*#__PURE__*/React.createElement("button", {
-    className: "mobile-menu-btn",
-    "aria-label": "Apri menu",
+    className: "mobile-menu-btn" + (mobileNavOpen ? " open" : ""),
+    "aria-label": mobileNavOpen ? "Chiudi menu" : "Apri menu",
     onClick: () => setMobileNavOpen(v => !v)
   }, /*#__PURE__*/React.createElement("svg", {
     viewBox: "0 0 24 24",
@@ -9937,9 +10073,15 @@ function PortalIntro({ onComplete }) {
   const glyphs = '\u25B2\u25B3\u25C7\u25C8\u25CA\u29EB\u2736\u2737\u2738\u2739\u273A\u2741\u2748\u274B\u2055';
 
   useEffect(() => {
-    // Character scramble sul titolo (4.7s — 5.6s)
+    // Tempi compressi su mobile per fluidità (≈metà del desktop)
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+    const t = isMobile
+      ? { scramble: 2550, sub: 3050, dissolve: 3900, unmount: 4700, interval: 38 }
+      : { scramble: 4700, sub: 5700, dissolve: 7400, unmount: 8600, interval: 45 };
+
+    // Character scramble sul titolo
     let scrambleFrame = 0;
-    const scrambleTotal = 20;
+    const scrambleTotal = isMobile ? 12 : 20;
     const scrambleTimer = setTimeout(() => {
       const interval = setInterval(() => {
         let str = '';
@@ -9960,22 +10102,22 @@ function PortalIntro({ onComplete }) {
           clearInterval(interval);
           setTitleText(titleFinal);
         }
-      }, 45);
-    }, 4700);
+      }, t.interval);
+    }, t.scramble);
 
-    // Typewriter del sottotitolo (5.7s +)
+    // Typewriter del sottotitolo
     const subTimer = setTimeout(() => {
       let i = 0;
       const typeInterval = setInterval(() => {
         i++;
         setSubtitleText(subtitleFinal.slice(0, i));
         if (i >= subtitleFinal.length) clearInterval(typeInterval);
-      }, 38);
-    }, 5700);
+      }, isMobile ? 28 : 38);
+    }, t.sub);
 
-    // Dissolvenza finale (dopo che tutto ha respirato)
-    const dissolveTimer = setTimeout(() => setDissolving(true), 7400);
-    const unmountTimer = setTimeout(() => onComplete && onComplete(), 8600);
+    // Dissolvenza finale
+    const dissolveTimer = setTimeout(() => setDissolving(true), t.dissolve);
+    const unmountTimer = setTimeout(() => onComplete && onComplete(), t.unmount);
 
     return () => {
       clearTimeout(scrambleTimer);
