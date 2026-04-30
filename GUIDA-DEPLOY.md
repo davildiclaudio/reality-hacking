@@ -54,7 +54,7 @@ git push -u origin main
    `https://TUO-USERNAME.github.io/reality-hacking/`
 4. Aprilo: dovrebbe chiederti la password.
 
-**Password del sito:** `11279336`.
+**Password del sito:** `117933`.
 
 ### Passo 5 — Registrare un dominio economico
 
